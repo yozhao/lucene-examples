@@ -35,7 +35,7 @@ import java.util.List;
 /**
  * Created by yozhao on 5/30/14.
  */
-public class Selection extends TestCase {
+public class SelectionTest extends TestCase {
   private final Directory indexDir = new RAMDirectory();
 
   @Override
