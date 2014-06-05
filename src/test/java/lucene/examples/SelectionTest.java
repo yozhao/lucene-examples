@@ -10,6 +10,7 @@ import org.apache.lucene.document.LongField;
 import org.apache.lucene.document.StringField;
 import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.DirectoryReader;
+import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.Term;
@@ -36,134 +37,16 @@ import java.util.List;
  * Created by yozhao on 5/30/14.
  */
 public class SelectionTest extends TestCase {
-  private final Directory indexDir = new RAMDirectory();
+  private IndexReader reader;
 
   @Override
   public void setUp() throws Exception {
-    IndexWriterConfig config = new IndexWriterConfig(Version.LUCENE_48, new StandardAnalyzer(
-        Version.LUCENE_48));
-    IndexWriter writer = new IndexWriter(indexDir, config);
-
-    List<Document> docList = new ArrayList<Document>();
-
-    Document doc = new Document();
-    doc.add(new IntField("id", 0, Field.Store.YES));
-    // String
-    doc.add(new StringField("string", "abc", Field.Store.NO));
-    // Text
-    doc.add(new TextField("text", "hello world!", Field.Store.NO));
-    // long
-    doc.add(new LongField("long", 1, Field.Store.NO));
-    // double
-    doc.add(new DoubleField("double", 1.23456, Field.Store.NO));
-    docList.add(doc);
-
-    doc = new Document();
-    doc.add(new IntField("id", 1, Field.Store.YES));
-    // String
-    doc.add(new StringField("string", "abc", Field.Store.NO));
-    // long
-    doc.add(new LongField("long", 2, Field.Store.NO));
-    // double
-    doc.add(new DoubleField("double", 1.234567, Field.Store.NO));
-    docList.add(doc);
-
-    doc = new Document();
-    doc.add(new IntField("id", 2, Field.Store.YES));
-    // String
-    doc.add(new StringField("string", "abcd", Field.Store.NO));
-    // Text
-    doc.add(new TextField("text", "hello world!", Field.Store.NO));
-    // long
-    doc.add(new LongField("long", 1, Field.Store.NO));
-    // double
-    doc.add(new DoubleField("double", 1.234561, Field.Store.NO));
-    docList.add(doc);
-
-    doc = new Document();
-    doc.add(new IntField("id", 3, Field.Store.YES));
-    // String
-    doc.add(new StringField("string", "abcd", Field.Store.NO));
-    // Text
-    doc.add(new TextField("text", "hello lucene!", Field.Store.NO));
-    // long
-    doc.add(new LongField("long", 2, Field.Store.NO));
-    // double
-    doc.add(new DoubleField("double", 1.23456, Field.Store.NO));
-    docList.add(doc);
-
-    doc = new Document();
-    doc.add(new IntField("id", 4, Field.Store.YES));
-    // String
-    doc.add(new StringField("string", "abcd", Field.Store.NO));
-    // long
-    doc.add(new LongField("long", 3, Field.Store.NO));
-    // double
-    doc.add(new DoubleField("double", 2.23456, Field.Store.NO));
-    docList.add(doc);
-
-    doc = new Document();
-    doc.add(new IntField("id", 5, Field.Store.YES));
-    // String
-    doc.add(new StringField("string", "abcde", Field.Store.NO));
-    // long
-    doc.add(new LongField("long", 4, Field.Store.NO));
-    // double
-    doc.add(new DoubleField("double", 1.234559, Field.Store.NO));
-    docList.add(doc);
-
-    doc = new Document();
-    doc.add(new IntField("id", 6, Field.Store.YES));
-    // String
-    doc.add(new StringField("string", "abcdef", Field.Store.NO));
-    // long
-    doc.add(new LongField("long", 3, Field.Store.NO));
-    // No double field
-    docList.add(doc);
-
-    doc = new Document();
-    doc.add(new IntField("id", 7, Field.Store.YES));
-    // No String field
-    // long
-    doc.add(new LongField("long", 2, Field.Store.NO));
-    // double
-    doc.add(new DoubleField("double", 1.23456, Field.Store.NO));
-    docList.add(doc);
-
-    doc = new Document();
-    doc.add(new IntField("id", 8, Field.Store.YES));
-    // String
-    doc.add(new StringField("string", "abcde", Field.Store.NO));
-    // No long field
-    // double
-    doc.add(new DoubleField("double", 11.23456, Field.Store.NO));
-    docList.add(doc);
-
-    doc = new Document();
-    doc.add(new IntField("id", 9, Field.Store.YES));
-    // No String field
-    // long
-    doc.add(new LongField("long", 5, Field.Store.NO));
-    // double
-    doc.add(new DoubleField("double", 12.3456, Field.Store.NO));
-    docList.add(doc);
-
-    int count = 0;
-    for (Document d : docList) {
-      writer.addDocument(d);
-      // make sure we get 2 segments
-      if (++count % 5 == 0) {
-        writer.commit();
-      }
-    }
-    writer.commit();
-    writer.close();
+    reader = ExamplesUtil.getIndexReader();
   }
 
   @Test
   public void testStringSelection() throws Exception {
-    DirectoryReader directoryReader = DirectoryReader.open(indexDir);
-    IndexSearcher searcher = new IndexSearcher(directoryReader);
+    IndexSearcher searcher = new IndexSearcher(reader);
     // selection of abcde in "string" field
     Query q = new TermQuery(new Term("string", "abcde"));
     TopDocs docs = searcher.search(q, 10);
@@ -203,13 +86,12 @@ public class SelectionTest extends TestCase {
     assertEquals(2, docs.totalHits);
     assertEquals("3", searcher.doc(docs.scoreDocs[0].doc).get("id"));
     assertEquals("2", searcher.doc(docs.scoreDocs[1].doc).get("id"));
-    directoryReader.close();
+    reader.close();
   }
 
   @Test
   public void testLongSelection() throws Exception {
-    DirectoryReader directoryReader = DirectoryReader.open(indexDir);
-    IndexSearcher searcher = new IndexSearcher(directoryReader);
+    IndexSearcher searcher = new IndexSearcher(reader);
     Query q = NumericRangeQuery.newLongRange("long", 3L, 3L, true, true);
     TopDocs docs = searcher.search(q, 10);
     assertEquals(2, docs.totalHits);
@@ -246,13 +128,12 @@ public class SelectionTest extends TestCase {
     assertEquals(2, docs.totalHits);
     assertEquals("0", searcher.doc(docs.scoreDocs[0].doc).get("id"));
     assertEquals("2", searcher.doc(docs.scoreDocs[1].doc).get("id"));
-    directoryReader.close();
+    reader.close();
   }
 
   @Test
   public void testDoubleSelection() throws Exception {
-    DirectoryReader directoryReader = DirectoryReader.open(indexDir);
-    IndexSearcher searcher = new IndexSearcher(directoryReader);
+    IndexSearcher searcher = new IndexSearcher(reader);
     Query q = NumericRangeQuery.newDoubleRange("double", 1.23456, 1.23456, true, true);
     TopDocs docs = searcher.search(q, 10);
     assertEquals(3, docs.totalHits);
@@ -291,7 +172,7 @@ public class SelectionTest extends TestCase {
     assertEquals(2, docs.totalHits);
     assertEquals("0", searcher.doc(docs.scoreDocs[0].doc).get("id"));
     assertEquals("3", searcher.doc(docs.scoreDocs[1].doc).get("id"));
-    directoryReader.close();
+    reader.close();
   }
 
 }
