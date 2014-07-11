@@ -8,6 +8,7 @@ import org.apache.lucene.analysis.core.StopAnalyzer;
 import org.apache.lucene.analysis.core.WhitespaceAnalyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
+import org.apache.lucene.analysis.util.CharArraySet;
 import org.apache.lucene.util.Version;
 import org.junit.Test;
 
@@ -26,6 +27,16 @@ public class AnalyzerTest extends TestCase {
     stream.reset();
     String expected = "[hello][test][case][你][好][这][是][一][个][测][试][的][实][例][created][20140707]";
     String out = "";
+    while(stream.incrementToken()){
+      out += "[" + stream.getAttribute(CharTermAttribute.class).toString() + "]";
+    }
+    assertEquals(expected, out);
+    analyzer = new StandardAnalyzer(Version.LUCENE_48, CharArraySet.EMPTY_SET);
+    stream  = analyzer.tokenStream("", new StringReader("Hello, this is a test case. " +
+        "你好，这是一个测试的实例。" +  "created on 20140707"));
+    stream.reset();
+    expected = "[hello][this][is][a][test][case][你][好][这][是][一][个][测][试][的][实][例][created][on][20140707]";
+    out = "";
     while(stream.incrementToken()){
       out += "[" + stream.getAttribute(CharTermAttribute.class).toString() + "]";
     }
