@@ -1,6 +1,7 @@
 package lucene.examples;
 
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.analysis.util.CharArraySet;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.DoubleField;
 import org.apache.lucene.document.Field;
@@ -28,7 +29,7 @@ public class ExamplesUtil {
 
   static {
     IndexWriterConfig config = new IndexWriterConfig(Version.LUCENE_48, new StandardAnalyzer(
-        Version.LUCENE_48));
+        Version.LUCENE_48, CharArraySet.EMPTY_SET));
 
     List<Document> docList = new ArrayList<Document>();
 
