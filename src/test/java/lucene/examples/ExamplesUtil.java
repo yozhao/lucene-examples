@@ -45,6 +45,8 @@ public class ExamplesUtil {
     // Chinese
     doc.add(new TextField("artist", "刘德华", Field.Store.YES));
     doc.add(new TextField("song", "天意 刘德华", Field.Store.YES));
+    // for Span query
+    doc.add(new TextField("span", "the quick brown fox jumps over the lazy dog", Field.Store.YES));
     docList.add(doc);
 
     doc = new Document();
@@ -58,6 +60,8 @@ public class ExamplesUtil {
     // Chinese
     doc.add(new TextField("artist", "刘德海", Field.Store.YES));
     doc.add(new TextField("song", "天意", Field.Store.YES));
+    // for Span query
+    doc.add(new TextField("span", "the quick red fox jumps over the sleepy cat", Field.Store.YES));
     docList.add(doc);
 
 
