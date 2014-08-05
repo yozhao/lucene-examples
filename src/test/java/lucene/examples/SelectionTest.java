@@ -2,18 +2,9 @@ package lucene.examples;
 
 import junit.framework.TestCase;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
-import org.apache.lucene.document.Document;
-import org.apache.lucene.document.DoubleField;
-import org.apache.lucene.document.Field;
-import org.apache.lucene.document.IntField;
-import org.apache.lucene.document.LongField;
-import org.apache.lucene.document.StringField;
-import org.apache.lucene.document.TextField;
-import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
-import org.apache.lucene.index.IndexWriter;
-import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.Term;
+import org.apache.lucene.queries.BooleanFilter;
 import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
@@ -25,13 +16,8 @@ import org.apache.lucene.search.QueryWrapperFilter;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.search.WildcardQuery;
-import org.apache.lucene.store.Directory;
-import org.apache.lucene.store.RAMDirectory;
 import org.apache.lucene.util.Version;
 import org.junit.Test;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by yozhao on 5/30/14.
@@ -75,13 +61,22 @@ public class SelectionTest extends TestCase {
     assertEquals("7", searcher.doc(docs.scoreDocs[0].doc).get("id"));
     assertEquals("9", searcher.doc(docs.scoreDocs[1].doc).get("id"));
 
+    // selection of all the docs don't have "string" field via filter
+    BooleanFilter booleanFilter = new BooleanFilter();
+    booleanFilter.add(new QueryWrapperFilter(new WildcardQuery(new Term("string", "*"))),
+        BooleanClause.Occur.MUST_NOT);
+    docs = searcher.search(allDocsQuery, booleanFilter, 10);
+    assertEquals(2, docs.totalHits);
+    assertEquals("7", searcher.doc(docs.scoreDocs[0].doc).get("id"));
+    assertEquals("9", searcher.doc(docs.scoreDocs[1].doc).get("id"));
+
     // search "world" in "text" field then filter with "string" field
     QueryParser parser = new QueryParser(Version.LUCENE_48, "text",
         new StandardAnalyzer(Version.LUCENE_48));
     q = parser.parse("Hello lucene");
     TermQuery tQuery = new TermQuery(new Term("string", "abcd"));
-    QueryWrapperFilter filter = new QueryWrapperFilter(tQuery);
-    docs = searcher.search(q, filter, 10);
+    QueryWrapperFilter queryWrapperFilter = new QueryWrapperFilter(tQuery);
+    docs = searcher.search(q, queryWrapperFilter, 10);
     // return doc 3 and doc 2, doc 3 is first since matching score is higher
     assertEquals(2, docs.totalHits);
     assertEquals("3", searcher.doc(docs.scoreDocs[0].doc).get("id"));
