@@ -14,6 +14,7 @@ import org.apache.lucene.search.NumericRangeQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.QueryWrapperFilter;
 import org.apache.lucene.search.TermQuery;
+import org.apache.lucene.search.TermRangeFilter;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.search.WildcardQuery;
 import org.apache.lucene.util.Version;
@@ -61,9 +62,18 @@ public class SelectionTest extends TestCase {
     assertEquals("7", searcher.doc(docs.scoreDocs[0].doc).get("id"));
     assertEquals("9", searcher.doc(docs.scoreDocs[1].doc).get("id"));
 
-    // selection of all the docs don't have "string" field via filter
+    // selection of all the docs don't have "string" field via query filter
     BooleanFilter booleanFilter = new BooleanFilter();
     booleanFilter.add(new QueryWrapperFilter(new WildcardQuery(new Term("string", "*"))),
+        BooleanClause.Occur.MUST_NOT);
+    docs = searcher.search(allDocsQuery, booleanFilter, 10);
+    assertEquals(2, docs.totalHits);
+    assertEquals("7", searcher.doc(docs.scoreDocs[0].doc).get("id"));
+    assertEquals("9", searcher.doc(docs.scoreDocs[1].doc).get("id"));
+
+    // selection of all the docs don't have "string" field via range filter
+    booleanFilter = new BooleanFilter();
+    booleanFilter.add(new TermRangeFilter("string", null, null, false, false),
         BooleanClause.Occur.MUST_NOT);
     docs = searcher.search(allDocsQuery, booleanFilter, 10);
     assertEquals(2, docs.totalHits);
