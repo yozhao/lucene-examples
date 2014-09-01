@@ -10,6 +10,7 @@ import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.MatchAllDocsQuery;
+import org.apache.lucene.search.NumericRangeFilter;
 import org.apache.lucene.search.NumericRangeQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.QueryWrapperFilter;
@@ -108,7 +109,7 @@ public class SelectionTest extends TestCase {
     docs = searcher.search(q, 10);
     assertEquals(9, docs.totalHits);
 
-    // selection of all the docs don't have "long" field
+    // selection of all the docs don't have "long" field via query
     BooleanQuery bQuery = new BooleanQuery();
     MatchAllDocsQuery allDocsQuery = new MatchAllDocsQuery();
     bQuery.add(
@@ -120,6 +121,14 @@ public class SelectionTest extends TestCase {
         BooleanClause.Occur.MUST_NOT
     );
     docs = searcher.search(bQuery, 10);
+    assertEquals(1, docs.totalHits);
+    assertEquals("8", searcher.doc(docs.scoreDocs[0].doc).get("id"));
+
+    // selection of all the docs don't have "long" field via filter
+    BooleanFilter booleanFilter = new BooleanFilter();
+    booleanFilter.add(NumericRangeFilter.newLongRange("long", null, null, false, false),
+        BooleanClause.Occur.MUST_NOT);
+    docs = searcher.search(allDocsQuery, booleanFilter, 10);
     assertEquals(1, docs.totalHits);
     assertEquals("8", searcher.doc(docs.scoreDocs[0].doc).get("id"));
 
