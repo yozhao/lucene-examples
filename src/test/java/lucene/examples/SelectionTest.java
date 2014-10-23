@@ -33,6 +33,17 @@ public class SelectionTest extends TestCase {
   }
 
   @Test
+  public void testTextSelection() throws Exception {
+    IndexSearcher searcher = new IndexSearcher(reader);
+    Query q = new TermQuery(new Term("text", "hello"));
+    TopDocs docs = searcher.search(q, 10);
+    assertEquals(3, docs.totalHits);
+    assertEquals("0", searcher.doc(docs.scoreDocs[0].doc).get("id"));
+    assertEquals("2", searcher.doc(docs.scoreDocs[1].doc).get("id"));
+    assertEquals("3", searcher.doc(docs.scoreDocs[2].doc).get("id"));
+  }
+
+  @Test
   public void testStringSelection() throws Exception {
     IndexSearcher searcher = new IndexSearcher(reader);
     // selection of abcde in "string" field
