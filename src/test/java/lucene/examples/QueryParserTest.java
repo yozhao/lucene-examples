@@ -14,9 +14,6 @@ import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.util.Version;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 /**
  * Created by yozhao on 11/25/14.
  */
