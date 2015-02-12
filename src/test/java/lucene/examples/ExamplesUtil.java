@@ -7,6 +7,7 @@ import org.apache.lucene.document.DoubleField;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.IntField;
 import org.apache.lucene.document.LongField;
+import org.apache.lucene.document.NumericDocValuesField;
 import org.apache.lucene.document.StringField;
 import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.DirectoryReader;
@@ -43,6 +44,8 @@ public class ExamplesUtil {
     doc.add(new LongField("long", 1, Field.Store.NO));
     // double
     doc.add(new DoubleField("double", 1.23456, Field.Store.NO));
+    // doc value
+    doc.add(new NumericDocValuesField("docValue", Double.doubleToLongBits(1.23456)));
     // Chinese
     doc.add(new TextField("artist", "刘德华", Field.Store.YES));
     doc.add(new TextField("song", "天意 刘德华", Field.Store.YES));
@@ -58,6 +61,8 @@ public class ExamplesUtil {
     doc.add(new LongField("long", 2, Field.Store.NO));
     // double
     doc.add(new DoubleField("double", 1.234567, Field.Store.NO));
+    // doc value
+    doc.add(new NumericDocValuesField("docValue", Double.doubleToLongBits(1.234567)));
     // Chinese
     doc.add(new TextField("artist", "刘德海", Field.Store.YES));
     doc.add(new TextField("song", "天意", Field.Store.YES));
@@ -76,6 +81,7 @@ public class ExamplesUtil {
     doc.add(new LongField("long", 1, Field.Store.NO));
     // double
     doc.add(new DoubleField("double", 1.234561, Field.Store.NO));
+    doc.add(new NumericDocValuesField("docValue", Double.doubleToLongBits(1.234561)));
     // Chinese
     doc.add(new TextField("artist", "刘德华", Field.Store.YES));
     doc.add(new TextField("song", "冰雨", Field.Store.YES));
@@ -91,6 +97,7 @@ public class ExamplesUtil {
     doc.add(new LongField("long", 2, Field.Store.NO));
     // double
     doc.add(new DoubleField("double", 1.23456, Field.Store.NO));
+    doc.add(new NumericDocValuesField("docValue", Double.doubleToLongBits(1.23456)));
     // Chinese
     doc.add(new TextField("artist", "刘德华", Field.Store.YES));
     doc.add(new TextField("song", "谢谢你的爱", Field.Store.YES));
@@ -104,6 +111,7 @@ public class ExamplesUtil {
     doc.add(new LongField("long", 3, Field.Store.NO));
     // double
     doc.add(new DoubleField("double", 2.23456, Field.Store.NO));
+    doc.add(new DoubleField("docValue", 2.23456, Field.Store.NO));
     // Chinese
     doc.add(new TextField("artist", "王杰", Field.Store.YES));
     doc.add(new TextField("song", "天意", Field.Store.YES));
