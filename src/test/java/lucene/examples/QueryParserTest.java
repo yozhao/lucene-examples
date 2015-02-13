@@ -141,6 +141,20 @@ public class QueryParserTest {
     positions = ((PhraseQuery) query).getPositions();
     Assert.assertEquals(0, positions[0]);
     Assert.assertEquals(1, positions[1]);
+
+    query = parser.parse("+小米^10 -科技^2");
+    Assert.assertTrue(query instanceof BooleanQuery);
+    clauses = ((BooleanQuery) query).getClauses();
+    Assert.assertEquals(2, clauses.length);
+    Assert.assertTrue(clauses[0].getQuery() instanceof TermQuery);
+    Assert.assertEquals("MUST", clauses[0].getOccur().name());
+    Assert.assertEquals((float) 10.0, clauses[0].getQuery().getBoost());
+    Assert.assertEquals("小米", ((TermQuery) clauses[0].getQuery()).getTerm().text());
+
+    Assert.assertTrue(clauses[1].getQuery() instanceof TermQuery);
+    Assert.assertEquals("MUST_NOT", clauses[1].getOccur().name());
+    Assert.assertEquals((float) 2.0, clauses[1].getQuery().getBoost());
+    Assert.assertEquals("科技", ((TermQuery) clauses[1].getQuery()).getTerm().text());
   }
 
 }
