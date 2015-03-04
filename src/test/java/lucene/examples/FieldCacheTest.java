@@ -2,9 +2,11 @@ package lucene.examples;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
+import org.apache.lucene.index.BinaryDocValues;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.search.FieldCache;
+import org.apache.lucene.util.BytesRef;
 import org.junit.Test;
 
 /**
@@ -22,6 +24,17 @@ public class FieldCacheTest extends TestCase {
   public void testFieldCache() throws Exception {
     DirectoryReader dirReader = (DirectoryReader)reader;
     FieldCache.Ints ints = FieldCache.DEFAULT.getInts(dirReader.leaves().get(0).reader(), "id", false);
+    for (int i = 0; i < 5; ++i) {
+      Assert.assertEquals(i, ints.get(i));
+    }
+
+    BinaryDocValues terms = FieldCache.DEFAULT.getTerms(dirReader.leaves().get(0).reader(), "string", false);
+    BytesRef bytesRef = new BytesRef();
+    terms.get(0, bytesRef);
+    Assert.assertEquals("abc", bytesRef.utf8ToString());
+    terms.get(2, bytesRef);
+    Assert.assertEquals("abcd", bytesRef.utf8ToString());
+
     for (int i = 0; i < 5; ++i) {
       Assert.assertEquals(i, ints.get(i));
     }
