@@ -5,6 +5,7 @@ import org.apache.lucene.analysis.util.CharArraySet;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.DoubleField;
 import org.apache.lucene.document.Field;
+import org.apache.lucene.document.FieldType;
 import org.apache.lucene.document.IntField;
 import org.apache.lucene.document.LongField;
 import org.apache.lucene.document.NumericDocValuesField;
@@ -51,6 +52,15 @@ public class ExamplesUtil {
     doc.add(new TextField("song", "天意 刘德华", Field.Store.YES));
     // for Span query
     doc.add(new TextField("span", "the quick brown fox jumps over the lazy dog", Field.Store.YES));
+    // term vector 1
+    FieldType tvFieldType = new FieldType();
+    tvFieldType.setIndexed(true);
+    tvFieldType.setTokenized(true);
+    tvFieldType.setStored(true);
+    tvFieldType.setStoreTermVectors(true);
+    tvFieldType.setStoreTermVectorPositions(true);
+    tvFieldType.setStoreTermVectorOffsets(true);
+    doc.add(new Field("tv0", "the quick brown fox jumps over the lazy dog", tvFieldType));
     docList.add(doc);
 
     doc = new Document();
@@ -68,8 +78,8 @@ public class ExamplesUtil {
     doc.add(new TextField("song", "天意", Field.Store.YES));
     // for Span query
     doc.add(new TextField("span", "the quick red fox jumps over the sleepy cat", Field.Store.YES));
+    doc.add(new Field("tv0", "the quick brown fox jumps over the lazy dog", tvFieldType));
     docList.add(doc);
-
 
     doc = new Document();
     doc.add(new IntField("id", 2, Field.Store.YES));
@@ -85,6 +95,7 @@ public class ExamplesUtil {
     // Chinese
     doc.add(new TextField("artist", "刘德华", Field.Store.YES));
     doc.add(new TextField("song", "冰雨", Field.Store.YES));
+    doc.add(new Field("tv0", "the quick brown fox jumps over the lazy dog", tvFieldType));
     docList.add(doc);
 
     doc = new Document();
