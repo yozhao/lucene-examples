@@ -12,6 +12,7 @@ import org.apache.lucene.document.NumericDocValuesField;
 import org.apache.lucene.document.StringField;
 import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.DirectoryReader;
+import org.apache.lucene.index.FieldInfo;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
@@ -52,15 +53,42 @@ public class ExamplesUtil {
     doc.add(new TextField("song", "天意 刘德华", Field.Store.YES));
     // for Span query
     doc.add(new TextField("span", "the quick brown fox jumps over the lazy dog", Field.Store.YES));
+    // term vector 0
+    FieldType tvFieldType0 = new FieldType();
+    tvFieldType0.setIndexed(true);
+    tvFieldType0.setTokenized(true);
+    tvFieldType0.setStored(true);
+    tvFieldType0.setStoreTermVectors(true);
+    tvFieldType0.setStoreTermVectorPositions(true);
+    tvFieldType0.setStoreTermVectorOffsets(true);
+    doc.add(new Field("tv0", "the quick brown fox jumps over the lazy dog", tvFieldType0));
     // term vector 1
-    FieldType tvFieldType = new FieldType();
-    tvFieldType.setIndexed(true);
-    tvFieldType.setTokenized(true);
-    tvFieldType.setStored(true);
-    tvFieldType.setStoreTermVectors(true);
-    tvFieldType.setStoreTermVectorPositions(true);
-    tvFieldType.setStoreTermVectorOffsets(true);
-    doc.add(new Field("tv0", "the quick brown fox jumps over the lazy dog", tvFieldType));
+    FieldType tvFieldType1 = new FieldType();
+    tvFieldType1.setIndexed(true);
+    tvFieldType1.setTokenized(true);
+    tvFieldType1.setStored(true);
+    tvFieldType1.setStoreTermVectors(true);
+    tvFieldType1.setStoreTermVectorPositions(false);
+    tvFieldType1.setStoreTermVectorOffsets(false);
+    doc.add(new Field("tv1", "the quick brown fox jumps over the lazy dog", tvFieldType1));
+    // term vector 2
+    FieldType tvFieldType2 = new FieldType();
+    tvFieldType2.setIndexed(true);
+    tvFieldType2.setTokenized(true);
+    tvFieldType2.setStored(true);
+    tvFieldType2.setStoreTermVectors(true);
+    tvFieldType2.setStoreTermVectorPositions(true);
+    tvFieldType2.setStoreTermVectorOffsets(false);
+    doc.add(new Field("tv2", "the quick brown fox jumps over the lazy dog", tvFieldType2));
+    // term vector 3
+    FieldType tvFieldType3 = new FieldType();
+    tvFieldType3.setIndexed(true);
+    tvFieldType3.setTokenized(true);
+    tvFieldType3.setStored(true);
+    tvFieldType3.setStoreTermVectors(true);
+    tvFieldType3.setStoreTermVectorPositions(false);
+    tvFieldType3.setStoreTermVectorOffsets(true);
+    doc.add(new Field("tv3", "the quick brown fox jumps over the lazy dog", tvFieldType3));
     docList.add(doc);
 
     doc = new Document();
@@ -78,7 +106,6 @@ public class ExamplesUtil {
     doc.add(new TextField("song", "天意", Field.Store.YES));
     // for Span query
     doc.add(new TextField("span", "the quick red fox jumps over the sleepy cat", Field.Store.YES));
-    doc.add(new Field("tv0", "the quick brown fox jumps over the lazy dog", tvFieldType));
     docList.add(doc);
 
     doc = new Document();
@@ -95,7 +122,6 @@ public class ExamplesUtil {
     // Chinese
     doc.add(new TextField("artist", "刘德华", Field.Store.YES));
     doc.add(new TextField("song", "冰雨", Field.Store.YES));
-    doc.add(new Field("tv0", "the quick brown fox jumps over the lazy dog", tvFieldType));
     docList.add(doc);
 
     doc = new Document();

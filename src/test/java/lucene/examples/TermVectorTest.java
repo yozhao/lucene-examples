@@ -22,12 +22,12 @@ public class TermVectorTest extends TestCase {
   }
 
   @Test
-  public void testTermVector() throws Exception {
+  public void testTermVectorWithPositionsAndOffsets() throws Exception {
+    System.out.println("testTermVectorWithPositionsAndOffsets");
     Terms terms = reader.getTermVector(0, "tv0");
     System.out.println("Term vector field value: " + reader.document(0).get("tv0"));
     Assert.assertEquals(1, terms.getDocCount());
     Assert.assertEquals(8, terms.getSumDocFreq());
-    System.out.println(terms.getSumTotalTermFreq());
     TermsEnum termsEnum = null;
     DocsAndPositionsEnum docsAndPositionsEnum = null;
     termsEnum = terms.iterator(termsEnum);
@@ -36,7 +36,7 @@ public class TermVectorTest extends TestCase {
       Assert.assertNotNull(docsAndPositionsEnum);
       docsAndPositionsEnum.nextDoc();
       int freq = docsAndPositionsEnum.freq();
-      String info = termsEnum.term().utf8ToString() + " occurs " + termsEnum.totalTermFreq() + " times, ";
+      String info = termsEnum.term().utf8ToString() + " occurs " + freq + " times, ";
       for (int i = 0; i < freq; ++i) {
         int position = docsAndPositionsEnum.nextPosition();
         int start = docsAndPositionsEnum.startOffset();
@@ -48,5 +48,81 @@ public class TermVectorTest extends TestCase {
       }
       System.out.println(info);
     }
+    System.out.println("\n");
+  }
+
+
+  @Test
+  public void testTermVectorWithoutPositionsOrOffsets() throws Exception {
+    System.out.println("testTermVectorWithoutPositionsOrOffsets");
+    Terms terms = reader.getTermVector(0, "tv1");
+    Assert.assertEquals(1, terms.getDocCount());
+    Assert.assertEquals(8, terms.getSumDocFreq());
+    TermsEnum termsEnum = null;
+    DocsAndPositionsEnum docsAndPositionsEnum = null;
+    termsEnum = terms.iterator(termsEnum);
+    while ((termsEnum.next()) != null) {
+      docsAndPositionsEnum = termsEnum.docsAndPositions(null, docsAndPositionsEnum);
+      Assert.assertNull(docsAndPositionsEnum);
+    }
+    System.out.println("\n");
+  }
+
+  public void testTermVectorWithPositions() throws Exception {
+    System.out.println("testTermVectorWithPositions");
+    Terms terms = reader.getTermVector(0, "tv2");
+    System.out.println("Term vector field value: " + reader.document(0).get("tv0"));
+    Assert.assertEquals(1, terms.getDocCount());
+    Assert.assertEquals(8, terms.getSumDocFreq());
+    TermsEnum termsEnum = null;
+    DocsAndPositionsEnum docsAndPositionsEnum = null;
+    termsEnum = terms.iterator(termsEnum);
+    while ((termsEnum.next()) != null) {
+      docsAndPositionsEnum = termsEnum.docsAndPositions(null, docsAndPositionsEnum);
+      Assert.assertNotNull(docsAndPositionsEnum);
+      docsAndPositionsEnum.nextDoc();
+      int freq = docsAndPositionsEnum.freq();
+      String info = termsEnum.term().utf8ToString() + " occurs " + freq + " times, ";
+      for (int i = 0; i < freq; ++i) {
+        int position = docsAndPositionsEnum.nextPosition();
+        int start = docsAndPositionsEnum.startOffset();
+        int end = docsAndPositionsEnum.endOffset();
+        if (i > 0) {
+          info += " ";
+        }
+        info += position + ":" + start + ":" + end;
+      }
+      System.out.println(info);
+    }
+    System.out.println("\n");
+  }
+
+  public void testTermVectorWithOffsets() throws Exception {
+    System.out.println("testTermVectorWithOffsets");
+    Terms terms = reader.getTermVector(0, "tv3");
+    System.out.println("Term vector field value: " + reader.document(0).get("tv0"));
+    Assert.assertEquals(1, terms.getDocCount());
+    Assert.assertEquals(8, terms.getSumDocFreq());
+    TermsEnum termsEnum = null;
+    DocsAndPositionsEnum docsAndPositionsEnum = null;
+    termsEnum = terms.iterator(termsEnum);
+    while ((termsEnum.next()) != null) {
+      docsAndPositionsEnum = termsEnum.docsAndPositions(null, docsAndPositionsEnum);
+      Assert.assertNotNull(docsAndPositionsEnum);
+      docsAndPositionsEnum.nextDoc();
+      int freq = docsAndPositionsEnum.freq();
+      String info = termsEnum.term().utf8ToString() + " occurs " + freq + " times, ";
+      for (int i = 0; i < freq; ++i) {
+        int position = docsAndPositionsEnum.nextPosition();
+        int start = docsAndPositionsEnum.startOffset();
+        int end = docsAndPositionsEnum.endOffset();
+        if (i > 0) {
+          info += " ";
+        }
+        info += position + ":" + start + ":" + end;
+      }
+      System.out.println(info);
+    }
+    System.out.println("\n");
   }
 }

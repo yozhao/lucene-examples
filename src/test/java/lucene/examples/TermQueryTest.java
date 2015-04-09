@@ -24,14 +24,13 @@ public class TermQueryTest extends TestCase {
     IndexSearcher searcher = new IndexSearcher(reader);
     Term term = new Term("text", "hello");
     TermQuery termQuery = new TermQuery(term);
-    termQuery.setBoost(0);
     TopDocs docs = searcher.search(termQuery, 10);
     for (int i = 0; i < docs.totalHits; ++i) {
       System.out.println(searcher.doc(docs.scoreDocs[i].doc).get("id") + ":"
           + docs.scoreDocs[i].score);
     }
-    assertEquals(1, docs.totalHits);
-    assertEquals("3", searcher.doc(docs.scoreDocs[0].doc).get("id"));
+    assertEquals(3, docs.totalHits);
+    assertEquals("0", searcher.doc(docs.scoreDocs[0].doc).get("id"));
     reader.close();
   }
 }
