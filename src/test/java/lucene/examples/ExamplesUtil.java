@@ -1,5 +1,8 @@
 package lucene.examples;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.analysis.util.CharArraySet;
 import org.apache.lucene.document.Document;
@@ -12,16 +15,12 @@ import org.apache.lucene.document.NumericDocValuesField;
 import org.apache.lucene.document.StringField;
 import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.DirectoryReader;
-import org.apache.lucene.index.FieldInfo;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.RAMDirectory;
 import org.apache.lucene.util.Version;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by yozhao on 6/5/14.
@@ -31,8 +30,8 @@ public class ExamplesUtil {
   static final Directory IDX_DIR = new RAMDirectory();
 
   static {
-    IndexWriterConfig config = new IndexWriterConfig(Version.LUCENE_48, new StandardAnalyzer(
-        Version.LUCENE_48, CharArraySet.EMPTY_SET));
+    IndexWriterConfig config = new IndexWriterConfig(Version.LUCENE_48,
+        new StandardAnalyzer(Version.LUCENE_48, CharArraySet.EMPTY_SET));
 
     List<Document> docList = new ArrayList<Document>();
 
@@ -231,8 +230,7 @@ public class ExamplesUtil {
     }
   }
 
-  public static IndexReader getIndexReader()
-      throws Exception {
+  public static IndexReader getIndexReader() throws Exception {
     return DirectoryReader.open(IDX_DIR);
   }
 }

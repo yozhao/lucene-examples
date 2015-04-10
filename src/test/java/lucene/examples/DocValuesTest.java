@@ -35,7 +35,6 @@ public class DocValuesTest {
   static final String SORTED_FIELD = "sorted";
   static final String SORTEDSET_FIELD = "sortedset";
 
-  static RAMDirectory dir = new RAMDirectory();
   static long[] numericVals = new long[] {12, 13, 0, 100, 19};
   static String[] binary = new String[] {"lucene", "doc", "value", "test", "example"};
   static String[] sortedVals = new String[] {"lucene", "facet", "abacus", "search", null};
@@ -47,6 +46,7 @@ public class DocValuesTest {
 
   @BeforeClass
   public static void setup() throws Exception {
+    RAMDirectory dir = new RAMDirectory();
     IndexWriterConfig config = new IndexWriterConfig(Version.LUCENE_48, new StandardAnalyzer(Version.LUCENE_48));
     IndexWriter writer = new IndexWriter(dir, config);
     for (int i = 0; i < numericVals.length; ++i) {
