@@ -21,23 +21,23 @@ public class AnalyzerTest extends TestCase {
 
   @Test
   public void testStandardAnalyzer() throws Exception {
-    Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_48);
-    TokenStream stream  = analyzer.tokenStream("", new StringReader("Hello, this is a test case. " +
-        "你好，这是一个测试的实例。" +  "created on 20140707"));
+    Analyzer analyzer = new StandardAnalyzer();
+    TokenStream stream = analyzer.tokenStream("", new StringReader("Hello, this is a test case. " +
+        "你好，这是一个测试的实例。" + "created on 20140707"));
     stream.reset();
     String expected = "[hello][test][case][你][好][这][是][一][个][测][试][的][实][例][created][20140707]";
     String out = "";
-    while(stream.incrementToken()){
+    while (stream.incrementToken()) {
       out += "[" + stream.getAttribute(CharTermAttribute.class).toString() + "]";
     }
     assertEquals(expected, out);
-    analyzer = new StandardAnalyzer(Version.LUCENE_48, CharArraySet.EMPTY_SET);
-    stream  = analyzer.tokenStream("", new StringReader("Hello, this is a test case. " +
-        "你好，这是一个测试的实例。" +  "created on 20140707"));
+    analyzer = new StandardAnalyzer(CharArraySet.EMPTY_SET);
+    stream = analyzer.tokenStream("", new StringReader("Hello, this is a test case. " +
+        "你好，这是一个测试的实例。" + "created on 20140707"));
     stream.reset();
     expected = "[hello][this][is][a][test][case][你][好][这][是][一][个][测][试][的][实][例][created][on][20140707]";
     out = "";
-    while(stream.incrementToken()){
+    while (stream.incrementToken()) {
       out += "[" + stream.getAttribute(CharTermAttribute.class).toString() + "]";
     }
     assertEquals(expected, out);
@@ -46,12 +46,12 @@ public class AnalyzerTest extends TestCase {
   @Test
   public void testStopAnalyzer() throws Exception {
     Analyzer analyzer = new StopAnalyzer(Version.LUCENE_48);
-    TokenStream stream  = analyzer.tokenStream("", new StringReader("Hello, this is a test case. " +
-        "你好，这是一个测试的实例。" +  "created on 20140707"));
+    TokenStream stream = analyzer.tokenStream("", new StringReader("Hello, this is a test case. " +
+        "你好，这是一个测试的实例。" + "created on 20140707"));
     stream.reset();
     String expected = "[hello][test][case][你好][这是一个测试的实例][created]";
     String out = "";
-    while(stream.incrementToken()){
+    while (stream.incrementToken()) {
       out += "[" + stream.getAttribute(CharTermAttribute.class).toString() + "]";
     }
     assertEquals(expected, out);
@@ -60,12 +60,12 @@ public class AnalyzerTest extends TestCase {
   @Test
   public void testSimpleAnalyzer() throws Exception {
     Analyzer analyzer = new SimpleAnalyzer(Version.LUCENE_48);
-    TokenStream stream  = analyzer.tokenStream("", new StringReader("Hello, this is a test case. " +
-        "你好，这是一个测试的实例。" +  "created on 20140707"));
+    TokenStream stream = analyzer.tokenStream("", new StringReader("Hello, this is a test case. " +
+        "你好，这是一个测试的实例。" + "created on 20140707"));
     stream.reset();
     String expected = "[hello][this][is][a][test][case][你好][这是一个测试的实例][created][on]";
     String out = "";
-    while(stream.incrementToken()){
+    while (stream.incrementToken()) {
       out += "[" + stream.getAttribute(CharTermAttribute.class).toString() + "]";
     }
     assertEquals(expected, out);
@@ -74,12 +74,12 @@ public class AnalyzerTest extends TestCase {
   @Test
   public void testWhitespaceAnalyzer() throws Exception {
     Analyzer analyzer = new WhitespaceAnalyzer(Version.LUCENE_48);
-    TokenStream stream  = analyzer.tokenStream("", new StringReader("Hello, this is a test case. " +
-        "你好，这是一个测试的实例。" +  "created on 20140707"));
+    TokenStream stream = analyzer.tokenStream("", new StringReader("Hello, this is a test case. " +
+        "你好，这是一个测试的实例。" + "created on 20140707"));
     stream.reset();
     String expected = "[Hello,][this][is][a][test][case.][你好，这是一个测试的实例。created][on][20140707]";
     String out = "";
-    while(stream.incrementToken()){
+    while (stream.incrementToken()) {
       out += "[" + stream.getAttribute(CharTermAttribute.class).toString() + "]";
     }
     assertEquals(expected, out);

@@ -10,7 +10,7 @@
     <description>Lucene examples project</description>
 
     <properties>
-        <lucene.version>4.8.1</lucene.version>
+        <lucene.version>4.10.0</lucene.version>
     </properties>
 
     <dependencies>

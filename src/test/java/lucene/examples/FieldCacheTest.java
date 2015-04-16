@@ -29,10 +29,9 @@ public class FieldCacheTest extends TestCase {
     }
 
     BinaryDocValues terms = FieldCache.DEFAULT.getTerms(dirReader.leaves().get(0).reader(), "string", false);
-    BytesRef bytesRef = new BytesRef();
-    terms.get(0, bytesRef);
+    BytesRef bytesRef = terms.get(0);
     Assert.assertEquals("abc", bytesRef.utf8ToString());
-    terms.get(2, bytesRef);
+    bytesRef = terms.get(2);
     Assert.assertEquals("abcd", bytesRef.utf8ToString());
 
     for (int i = 0; i < 5; ++i) {

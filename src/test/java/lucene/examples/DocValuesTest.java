@@ -87,16 +87,15 @@ public class DocValuesTest {
   @Test
   public void testBinaryDocValues() throws Exception {
     BinaryDocValues docVals = atomicReader.getBinaryDocValues(BINARY_FIELD);
-    BytesRef bytesRef = new BytesRef();
-    docVals.get(0, bytesRef);
+    BytesRef bytesRef = docVals.get(0);
     Assert.assertEquals("lucene", bytesRef.utf8ToString());
-    docVals.get(1, bytesRef);
+    bytesRef = docVals.get(1);
     Assert.assertEquals("doc", bytesRef.utf8ToString());
-    docVals.get(2, bytesRef);
+    bytesRef = docVals.get(2);
     Assert.assertEquals("value", bytesRef.utf8ToString());
-    docVals.get(3, bytesRef);
+    bytesRef = docVals.get(3);
     Assert.assertEquals("test", bytesRef.utf8ToString());
-    docVals.get(4, bytesRef);
+    bytesRef = docVals.get(4);
     Assert.assertEquals("example", bytesRef.utf8ToString());
   }
 
@@ -106,8 +105,7 @@ public class DocValuesTest {
     String ordInfo = "", values = "";
     for (int i = 0; i < atomicReader.maxDoc(); ++i) {
       ordInfo += docVals.getOrd(i) + ":";
-      BytesRef bytesRef = new BytesRef();
-      docVals.get(i, bytesRef);
+      BytesRef bytesRef = docVals.get(i);
       values += bytesRef.utf8ToString() + ":";
     }
     Assert.assertEquals("2:1:0:3:-1:", ordInfo);
@@ -124,8 +122,7 @@ public class DocValuesTest {
       info += "Doc " + i;
       while ((ord = docVals.nextOrd()) != SortedSetDocValues.NO_MORE_ORDS) {
         info += ", " + ord + "/";
-        BytesRef bytesRef = new BytesRef();
-        docVals.lookupOrd(ord, bytesRef);
+        BytesRef bytesRef = docVals.lookupOrd(ord);
         info += bytesRef.utf8ToString();
       }
       info += ";";
