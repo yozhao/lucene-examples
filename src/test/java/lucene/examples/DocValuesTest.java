@@ -47,7 +47,7 @@ public class DocValuesTest {
   @BeforeClass
   public static void setup() throws Exception {
     RAMDirectory dir = new RAMDirectory();
-    IndexWriterConfig config = new IndexWriterConfig(Version.LUCENE_48, new StandardAnalyzer(Version.LUCENE_48));
+    IndexWriterConfig config = new IndexWriterConfig(Version.LUCENE_4_10_0, new StandardAnalyzer());
     IndexWriter writer = new IndexWriter(dir, config);
     for (int i = 0; i < numericVals.length; ++i) {
       Document doc = new Document();

@@ -21,8 +21,7 @@ public class QueryParserTest {
 
   @Test
   public void testQueryParser() throws ParseException {
-    QueryParser parser = new QueryParser(Version.LUCENE_48, "",
-        new StandardAnalyzer(Version.LUCENE_48));
+    QueryParser parser = new QueryParser("",  new StandardAnalyzer());
     Query query = parser.parse("小米^10 科技^2");
     Assert.assertTrue(query instanceof BooleanQuery);
     BooleanClause[] clauses = ((BooleanQuery) query).getClauses();
@@ -61,7 +60,7 @@ public class QueryParserTest {
     Assert.assertEquals("SHOULD", subClauses[1].getOccur().name());
     Assert.assertEquals("技", ((TermQuery) subClauses[1].getQuery()).getTerm().text());
 
-    parser = new QueryParser(Version.LUCENE_48, "", new StandardAnalyzer(Version.LUCENE_48));
+    parser = new QueryParser("", new StandardAnalyzer());
     parser.setDefaultOperator(QueryParser.Operator.AND);
     query = parser.parse("小米^10 科技^2");
     Assert.assertTrue(query instanceof BooleanQuery);
@@ -116,7 +115,7 @@ public class QueryParserTest {
     Assert.assertEquals(2, positions[2]);
     Assert.assertEquals(3, positions[3]);
 
-    parser = new QueryParser(Version.LUCENE_48, "", new WhitespaceAnalyzer(Version.LUCENE_48));
+    parser = new QueryParser("", new WhitespaceAnalyzer());
     query = parser.parse("小米^10 科技^2");
     Assert.assertTrue(query instanceof BooleanQuery);
     clauses = ((BooleanQuery) query).getClauses();

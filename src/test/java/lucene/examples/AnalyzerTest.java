@@ -45,7 +45,7 @@ public class AnalyzerTest extends TestCase {
 
   @Test
   public void testStopAnalyzer() throws Exception {
-    Analyzer analyzer = new StopAnalyzer(Version.LUCENE_48);
+    Analyzer analyzer = new StopAnalyzer();
     TokenStream stream = analyzer.tokenStream("", new StringReader("Hello, this is a test case. " +
         "你好，这是一个测试的实例。" + "created on 20140707"));
     stream.reset();
@@ -59,7 +59,7 @@ public class AnalyzerTest extends TestCase {
 
   @Test
   public void testSimpleAnalyzer() throws Exception {
-    Analyzer analyzer = new SimpleAnalyzer(Version.LUCENE_48);
+    Analyzer analyzer = new SimpleAnalyzer();
     TokenStream stream = analyzer.tokenStream("", new StringReader("Hello, this is a test case. " +
         "你好，这是一个测试的实例。" + "created on 20140707"));
     stream.reset();
@@ -73,7 +73,7 @@ public class AnalyzerTest extends TestCase {
 
   @Test
   public void testWhitespaceAnalyzer() throws Exception {
-    Analyzer analyzer = new WhitespaceAnalyzer(Version.LUCENE_48);
+    Analyzer analyzer = new WhitespaceAnalyzer();
     TokenStream stream = analyzer.tokenStream("", new StringReader("Hello, this is a test case. " +
         "你好，这是一个测试的实例。" + "created on 20140707"));
     stream.reset();
