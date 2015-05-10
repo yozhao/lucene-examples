@@ -34,7 +34,7 @@ public class TermTraverseTest {
 
   @BeforeClass
   public static void setup() throws Exception {
-    IndexWriterConfig config = new IndexWriterConfig(Version.LUCENE_48, new StandardAnalyzer(Version.LUCENE_48, CharArraySet.EMPTY_SET));
+    IndexWriterConfig config = new IndexWriterConfig(Version.LUCENE_4_10_0, new StandardAnalyzer(CharArraySet.EMPTY_SET));
     IndexWriter writer = new IndexWriter(dir, config);
     FieldType docsOnlyType = new FieldType();
     docsOnlyType.setIndexed(true);
