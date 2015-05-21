@@ -30,8 +30,8 @@ public class ExamplesUtil {
   static final Directory IDX_DIR = new RAMDirectory();
 
   static {
-    IndexWriterConfig config = new IndexWriterConfig(Version.LUCENE_48,
-        new StandardAnalyzer(Version.LUCENE_48, CharArraySet.EMPTY_SET));
+    IndexWriterConfig config = new IndexWriterConfig(Version.LUCENE_4_10_0,
+        new StandardAnalyzer(CharArraySet.EMPTY_SET));
 
     List<Document> docList = new ArrayList<Document>();
 

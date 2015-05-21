@@ -22,7 +22,7 @@ public class FieldCacheTest extends TestCase {
 
   @Test
   public void testFieldCache() throws Exception {
-    DirectoryReader dirReader = (DirectoryReader)reader;
+    DirectoryReader dirReader = (DirectoryReader) reader;
     FieldCache.Ints ints = FieldCache.DEFAULT.getInts(dirReader.leaves().get(0).reader(), "id", false);
     for (int i = 0; i < 5; ++i) {
       Assert.assertEquals(i, ints.get(i));
@@ -37,10 +37,17 @@ public class FieldCacheTest extends TestCase {
     for (int i = 0; i < 5; ++i) {
       Assert.assertEquals(i, ints.get(i));
     }
-    FieldCache.Doubles doubles = FieldCache.DEFAULT.getDoubles(dirReader.leaves().get(0).reader(), "docValue",
-        false);
+    FieldCache.Doubles doubles = FieldCache.DEFAULT.getDoubles(dirReader.leaves().get(0).reader(), "docValue", false);
     Assert.assertEquals(1.23456, doubles.get(0));
     // docValue of doc 4 is omitted by NumericDocValuesField
     Assert.assertEquals(0.0, doubles.get(4));
+
+    // tokenized and stored field
+    terms = FieldCache.DEFAULT.getTerms(dirReader.leaves().get(0).reader(), "song", false);
+    for (int i = 0; i < 5; ++i) {
+      String song = dirReader.leaves().get(0).reader().document(i).get("song");
+      bytesRef = terms.get(i);
+      System.out.println("The filed is: \"" + song + "\", while filed cache gets \"" + bytesRef.utf8ToString() + "\"");
+    }
   }
 }
