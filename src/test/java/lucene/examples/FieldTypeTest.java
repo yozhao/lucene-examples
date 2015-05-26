@@ -29,8 +29,7 @@ public class FieldTypeTest extends TestCase {
 
   @Override
   public void setUp() throws Exception {
-    IndexWriterConfig config = new IndexWriterConfig(Version.LUCENE_48, new StandardAnalyzer(
-        Version.LUCENE_48, CharArraySet.EMPTY_SET));
+    IndexWriterConfig config = new IndexWriterConfig(Version.LUCENE_4_10_0, new StandardAnalyzer(CharArraySet.EMPTY_SET));
     Directory dir = new RAMDirectory();
     IndexWriter writer = new IndexWriter(dir, config);
 
@@ -80,7 +79,7 @@ public class FieldTypeTest extends TestCase {
   @Test
   public void testNormalFieldType() throws Exception {
     IndexSearcher searcher = new IndexSearcher(reader);
-    QueryParser parser = new QueryParser(Version.LUCENE_48, "", new StandardAnalyzer(Version.LUCENE_48));
+    QueryParser parser = new QueryParser("", new StandardAnalyzer());
     Query q = parser.parse("normal:小米");
     TopDocs docs = searcher.search(q, 10);
     assertEquals(3, docs.totalHits);
@@ -101,7 +100,7 @@ public class FieldTypeTest extends TestCase {
   @Test
   public void testOmitFreqFieldType() throws Exception {
     IndexSearcher searcher = new IndexSearcher(reader);
-    QueryParser parser = new QueryParser(Version.LUCENE_48, "", new StandardAnalyzer(Version.LUCENE_48));
+    QueryParser parser = new QueryParser("", new StandardAnalyzer());
     Query q = parser.parse("omitFreq:小米");
     TopDocs docs = searcher.search(q, 10);
     assertEquals(3, docs.totalHits);
@@ -121,7 +120,7 @@ public class FieldTypeTest extends TestCase {
   @Test
   public void testOmitNormsFieldType() throws Exception {
     IndexSearcher searcher = new IndexSearcher(reader);
-    QueryParser parser = new QueryParser(Version.LUCENE_48, "", new StandardAnalyzer(Version.LUCENE_48));
+    QueryParser parser = new QueryParser("", new StandardAnalyzer());
     Query q = parser.parse("omitNorms:小米");
     TopDocs docs = searcher.search(q, 10);
     assertEquals(3, docs.totalHits);

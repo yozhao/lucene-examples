@@ -18,7 +18,6 @@ import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TermRangeFilter;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.search.WildcardQuery;
-import org.apache.lucene.util.Version;
 import org.junit.Test;
 
 /**
@@ -93,8 +92,7 @@ public class SelectionTest extends TestCase {
     assertEquals("9", searcher.doc(docs.scoreDocs[1].doc).get("id"));
 
     // search "world" in "text" field then filter with "string" field
-    QueryParser parser = new QueryParser(Version.LUCENE_48, "text",
-        new StandardAnalyzer(Version.LUCENE_48));
+    QueryParser parser = new QueryParser("text", new StandardAnalyzer());
     q = parser.parse("Hello lucene");
     TermQuery tQuery = new TermQuery(new Term("string", "abcd"));
     QueryWrapperFilter queryWrapperFilter = new QueryWrapperFilter(tQuery);
@@ -144,8 +142,7 @@ public class SelectionTest extends TestCase {
     assertEquals("8", searcher.doc(docs.scoreDocs[0].doc).get("id"));
 
     // search "world" in "text" field then filter with "long" field
-    QueryParser parser = new QueryParser(Version.LUCENE_48, "text",
-        new StandardAnalyzer(Version.LUCENE_48));
+    QueryParser parser = new QueryParser("text", new StandardAnalyzer());
     q = parser.parse("Hello");
     NumericRangeQuery rQuery = NumericRangeQuery.newLongRange("long", 1L, 1L, true, true);
     QueryWrapperFilter filter = new QueryWrapperFilter(rQuery);
@@ -187,8 +184,7 @@ public class SelectionTest extends TestCase {
     assertEquals("6", searcher.doc(docs.scoreDocs[0].doc).get("id"));
 
     // search "world" in "text" field then filter with "long" field
-    QueryParser parser = new QueryParser(Version.LUCENE_48, "text",
-        new StandardAnalyzer(Version.LUCENE_48));
+    QueryParser parser = new QueryParser("text", new StandardAnalyzer());
     q = parser.parse("Hello");
     NumericRangeQuery rQuery = NumericRangeQuery.newDoubleRange("double", 1.23456, 1.23456, true,
         true);

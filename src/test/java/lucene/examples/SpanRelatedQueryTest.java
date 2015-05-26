@@ -1,8 +1,14 @@
 package lucene.examples;
 
+import java.io.IOException;
+import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import junit.framework.TestCase;
 import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.Token;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
@@ -12,7 +18,6 @@ import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.index.TermContext;
 import org.apache.lucene.search.IndexSearcher;
-import org.apache.lucene.search.PhraseQuery;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.search.spans.SpanFirstQuery;
 import org.apache.lucene.search.spans.SpanNearQuery;
@@ -21,15 +26,7 @@ import org.apache.lucene.search.spans.SpanOrQuery;
 import org.apache.lucene.search.spans.SpanQuery;
 import org.apache.lucene.search.spans.SpanTermQuery;
 import org.apache.lucene.search.spans.Spans;
-import org.apache.lucene.util.Version;
 import org.junit.Test;
-
-import java.io.IOException;
-import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Created by yozhao on 14-7-20.
@@ -47,7 +44,7 @@ public class SpanRelatedQueryTest extends TestCase {
     while (spans.next()) {
       int id = spans.doc();
       Document doc = reader.document(id);
-      Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_48, CharArraySet.EMPTY_SET);
+      Analyzer analyzer = new StandardAnalyzer(CharArraySet.EMPTY_SET);
 
       TokenStream stream = analyzer.tokenStream("", new StringReader(doc.get("span")));
       stream.reset();

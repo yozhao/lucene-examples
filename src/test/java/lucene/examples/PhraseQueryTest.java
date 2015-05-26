@@ -1,5 +1,7 @@
 package lucene.examples;
 
+import java.io.StringReader;
+
 import junit.framework.TestCase;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
@@ -12,10 +14,7 @@ import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.PhraseQuery;
 import org.apache.lucene.search.TopDocs;
-import org.apache.lucene.util.Version;
 import org.junit.Test;
-
-import java.io.StringReader;
 
 /**
  * Created by yozhao on 7/7/14.
@@ -34,7 +33,7 @@ public class PhraseQueryTest extends TestCase {
     System.out.println("==================================================");
     IndexSearcher searcher = new IndexSearcher(reader);
 
-    Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_48);
+    Analyzer analyzer = new StandardAnalyzer();
     TokenStream stream = analyzer.tokenStream("", new StringReader("刘德"));
     stream.reset();
 
@@ -83,7 +82,7 @@ public class PhraseQueryTest extends TestCase {
 
     IndexSearcher searcher = new IndexSearcher(reader);
 
-    Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_48);
+    Analyzer analyzer = new StandardAnalyzer();
     TokenStream stream = analyzer.tokenStream("", new StringReader("天意刘"));
     stream.reset();
 
@@ -113,7 +112,7 @@ public class PhraseQueryTest extends TestCase {
 
     IndexSearcher searcher = new IndexSearcher(reader);
 
-    Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_48);
+    Analyzer analyzer = new StandardAnalyzer();
     TokenStream stream = analyzer.tokenStream("", new StringReader("刘德华 柯受良 吴宗宪"));
     stream.reset();
 
@@ -143,7 +142,7 @@ public class PhraseQueryTest extends TestCase {
 
     IndexSearcher searcher = new IndexSearcher(reader);
 
-    Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_48);
+    Analyzer analyzer = new StandardAnalyzer();
     TokenStream stream = analyzer.tokenStream("", new StringReader("天意"));
     stream.reset();
 
