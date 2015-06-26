@@ -72,7 +72,6 @@ public class TermVectorTest extends TestCase {
       Assert.assertNull(docsAndPositionsEnum);
     }
     System.out.println("\n");
-    DelimitedPayloadTokenFilter
   }
 
   @Test
