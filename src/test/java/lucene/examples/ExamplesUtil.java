@@ -88,6 +88,15 @@ public class ExamplesUtil {
     tvFieldType3.setStoreTermVectorPositions(false);
     tvFieldType3.setStoreTermVectorOffsets(true);
     doc.add(new Field("tv3", "the quick brown fox jumps over the lazy dog", tvFieldType3));
+    // term vector 4
+    FieldType tvFieldType4 = new FieldType();
+    tvFieldType4.setIndexed(true);
+    tvFieldType4.setTokenized(true);
+    tvFieldType4.setStored(true);
+    tvFieldType4.setStoreTermVectors(false);
+    tvFieldType4.setStoreTermVectorPositions(false);
+    tvFieldType4.setStoreTermVectorOffsets(false);
+    doc.add(new Field("tv4", "the quick brown fox jumps over the lazy dog", tvFieldType4));
     docList.add(doc);
 
     doc = new Document();

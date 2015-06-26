@@ -2,8 +2,10 @@ package lucene.examples;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
+import org.apache.lucene.analysis.payloads.DelimitedPayloadTokenFilter;
 import org.apache.lucene.index.AtomicReader;
 import org.apache.lucene.index.DocsAndPositionsEnum;
+import org.apache.lucene.index.DocsEnum;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.Terms;
 import org.apache.lucene.index.TermsEnum;
@@ -59,15 +61,21 @@ public class TermVectorTest extends TestCase {
     Assert.assertEquals(1, terms.getDocCount());
     Assert.assertEquals(8, terms.getSumDocFreq());
     TermsEnum termsEnum = null;
+    DocsEnum docsEnum = null;
     DocsAndPositionsEnum docsAndPositionsEnum = null;
     termsEnum = terms.iterator(termsEnum);
     while ((termsEnum.next()) != null) {
+      docsEnum = termsEnum.docs(null, docsEnum);
+      docsEnum.nextDoc();
+      System.out.println(termsEnum.term().utf8ToString() + " occurs " + docsEnum.freq() + " times ");
       docsAndPositionsEnum = termsEnum.docsAndPositions(null, docsAndPositionsEnum);
       Assert.assertNull(docsAndPositionsEnum);
     }
     System.out.println("\n");
+    DelimitedPayloadTokenFilter
   }
 
+  @Test
   public void testTermVectorWithPositions() throws Exception {
     System.out.println("testTermVectorWithPositions");
     Terms terms = reader.getTermVector(0, "tv2");
@@ -97,6 +105,7 @@ public class TermVectorTest extends TestCase {
     System.out.println("\n");
   }
 
+  @Test
   public void testTermVectorWithOffsets() throws Exception {
     System.out.println("testTermVectorWithOffsets");
     Terms terms = reader.getTermVector(0, "tv3");
@@ -123,6 +132,14 @@ public class TermVectorTest extends TestCase {
       }
       System.out.println(info);
     }
+    System.out.println("\n");
+  }
+
+  @Test
+  public void testTermVectorWithoutVector() throws Exception {
+    System.out.println("testTermVectorWithoutVector");
+    Terms terms = reader.getTermVector(0, "tv4");
+    Assert.assertEquals(null, terms);
     System.out.println("\n");
   }
 }
