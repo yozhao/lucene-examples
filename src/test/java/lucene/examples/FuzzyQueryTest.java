@@ -50,7 +50,7 @@ public class FuzzyQueryTest {
 
     doc = new Document();
     doc.add(new TextField("text", "helloo lucene", Field.Store.NO));
-    // doc 2
+    // doc 3
     writer.addDocument(doc);
 
     writer.forceMerge(1);
