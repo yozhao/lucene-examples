@@ -126,6 +126,19 @@ public class SpanRelatedQueryTest extends TestCase {
     assertEquals(1, docs.totalHits);
     assertEquals("0", searcher.doc(docs.scoreDocs[0].doc).get("id"));
 
+    // order mismatched
+    nearQuery = new SpanNearQuery(new SpanQuery[] { quick,
+        lazy, brown}, 4, true);
+    docs = searcher.search(nearQuery, 10);
+    assertEquals(0, docs.totalHits);
+
+    // inOrder is false
+    nearQuery = new SpanNearQuery(new SpanQuery[] { quick,
+        lazy, brown}, 4, false);
+    docs = searcher.search(nearQuery, 10);
+    assertEquals(1, docs.totalHits);
+    assertEquals("0", searcher.doc(docs.scoreDocs[0].doc).get("id"));
+
     Map<Term, TermContext> termContexts = new HashMap<Term, TermContext>();
     Spans spans = nearQuery.getSpans(reader.getContext().leaves().get(0), null, termContexts);
     List<String> log = dumpSpans(spans);
