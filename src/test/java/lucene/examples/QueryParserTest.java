@@ -8,10 +8,10 @@ import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.FuzzyQuery;
 import org.apache.lucene.search.PhraseQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TermQuery;
-import org.apache.lucene.util.Version;
 import org.junit.Test;
 
 /**
@@ -159,6 +159,15 @@ public class QueryParserTest {
     query = parser.parse("title:\"小米科技\"~12");
     Assert.assertTrue(query instanceof PhraseQuery);
     Assert.assertEquals(12, ((PhraseQuery)query).getSlop());
-  }
 
+    query = parser.parse("title:小米科技");
+    Assert.assertTrue(query instanceof BooleanQuery);
+    Assert.assertEquals(4, ((BooleanQuery)query).getClauses().length);
+    query = parser.parse("title:小米科技~2");
+    Assert.assertTrue(query instanceof FuzzyQuery);
+    Assert.assertEquals(2, ((FuzzyQuery)query).getMaxEdits());
+    query = parser.parse("title:(小米科技~3)");
+    Assert.assertTrue(query instanceof FuzzyQuery);
+    Assert.assertEquals(2, ((FuzzyQuery)query).getMaxEdits());
+  }
 }
