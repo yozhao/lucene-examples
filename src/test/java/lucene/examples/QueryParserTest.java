@@ -154,6 +154,11 @@ public class QueryParserTest {
     Assert.assertEquals("MUST_NOT", clauses[1].getOccur().name());
     Assert.assertEquals((float) 2.0, clauses[1].getQuery().getBoost());
     Assert.assertEquals("科技", ((TermQuery) clauses[1].getQuery()).getTerm().text());
+
+    parser = new QueryParser("",  new StandardAnalyzer());
+    query = parser.parse("title:\"小米科技\"~12");
+    Assert.assertTrue(query instanceof PhraseQuery);
+    Assert.assertEquals(12, ((PhraseQuery)query).getSlop());
   }
 
 }
