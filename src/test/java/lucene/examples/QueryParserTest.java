@@ -169,5 +169,9 @@ public class QueryParserTest {
     query = parser.parse("title:(小米科技~3)");
     Assert.assertTrue(query instanceof FuzzyQuery);
     Assert.assertEquals(2, ((FuzzyQuery)query).getMaxEdits());
+
+    query = parser.parse("title:(\"小米科技\"~3)");
+    Assert.assertTrue(query instanceof PhraseQuery);
+    Assert.assertEquals(3, ((PhraseQuery)query).getSlop());
   }
 }

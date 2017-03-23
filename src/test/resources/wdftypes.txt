@@ -1,0 +1,5 @@
+$ => ALPHA
+% => ALPHANUM
+. => DIGIT
+÷ => DIGIT
+\u002C => DIGIT
