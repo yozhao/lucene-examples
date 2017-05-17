@@ -9,10 +9,12 @@ import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.Term;
+import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.PhraseQuery;
+import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TopDocs;
 import org.junit.Test;
 
@@ -176,6 +178,77 @@ public class PhraseQueryTest extends TestCase {
       System.out.println("score: " + docs.scoreDocs[i].score);
     }
     System.out.println("");
+    reader.close();
+  }
+
+
+  @Test
+  public void testPhraseQuery5() throws Exception {
+    System.out.println("testPhraseQuery5");
+    System.out.println("==================================================");
+
+    QueryParser parser = new QueryParser("",  new StandardAnalyzer());
+    Query query = parser.parse("span:(\"quick fox\"~1)");
+
+    IndexSearcher searcher = new IndexSearcher(reader);
+    TopDocs docs = searcher.search(query, 10);
+
+    assertEquals(2, docs.totalHits);
+    assertEquals("0", searcher.doc(docs.scoreDocs[0].doc).get("id"));
+
+    System.out.println("Query: " + query + "\nHits:");
+    for (int i = 0; i < docs.totalHits; ++i) {
+      System.out.println("id: " + searcher.doc(docs.scoreDocs[i].doc).get("id"));
+      System.out.println("span: " + searcher.doc(docs.scoreDocs[i].doc).get("span"));
+    }
+    System.out.println("");
+
+    query = parser.parse("span:(\"quick jumps\"~1)");
+    docs = searcher.search(query, 10);
+    assertEquals(0, docs.totalHits);
+
+    query = parser.parse("span:(\"fox quick\"~2)");
+    docs = searcher.search(query, 10);
+    assertEquals(0, docs.totalHits);
+
+    query = parser.parse("span:(\"fox quick\"~3)");
+    docs = searcher.search(query, 10);
+    assertEquals(2, docs.totalHits);
+    System.out.println("Query: " + query + "\nHits:");
+    for (int i = 0; i < docs.totalHits; ++i) {
+      System.out.println("id: " + searcher.doc(docs.scoreDocs[i].doc).get("id"));
+      System.out.println("span: " + searcher.doc(docs.scoreDocs[i].doc).get("span"));
+    }
+    System.out.println("");
+
+    query = parser.parse("span:(\"fox quick dog\"~5)");
+    docs = searcher.search(query, 10);
+    assertEquals(0, docs.totalHits);
+
+    query = parser.parse("span:(\"fox quick dog\"~6)");
+    docs = searcher.search(query, 10);
+    assertEquals(1, docs.totalHits);
+    System.out.println("Query: " + query + "\nHits:");
+    for (int i = 0; i < docs.totalHits; ++i) {
+      System.out.println("id: " + searcher.doc(docs.scoreDocs[i].doc).get("id"));
+      System.out.println("span: " + searcher.doc(docs.scoreDocs[i].doc).get("span"));
+    }
+    System.out.println("");
+
+    query = parser.parse("span:(\"lazy jumps quick\"~7)");
+    docs = searcher.search(query, 10);
+    assertEquals(0, docs.totalHits);
+
+    query = parser.parse("span:(\"lazy jumps quick\"~8)");
+    docs = searcher.search(query, 10);
+    assertEquals(1, docs.totalHits);
+    System.out.println("Query: " + query + "\nHits:");
+    for (int i = 0; i < docs.totalHits; ++i) {
+      System.out.println("id: " + searcher.doc(docs.scoreDocs[i].doc).get("id"));
+      System.out.println("span: " + searcher.doc(docs.scoreDocs[i].doc).get("span"));
+    }
+    System.out.println("");
+
     reader.close();
   }
 
