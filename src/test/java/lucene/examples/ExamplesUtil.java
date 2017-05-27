@@ -50,8 +50,8 @@ public class ExamplesUtil {
     // Chinese
     doc.add(new TextField("artist", "刘德华", Field.Store.YES));
     doc.add(new TextField("song", "天意 刘德华", Field.Store.YES));
-    // for Span query
     doc.add(new TextField("span", "the quick brown fox jumps over the lazy dog", Field.Store.YES));
+    doc.add(new TextField("phrase", "the quick brown fox jumps over the lazy dog", Field.Store.YES));
     // term vector 0
     FieldType tvFieldType0 = new FieldType();
     tvFieldType0.setIndexed(true);
@@ -112,8 +112,8 @@ public class ExamplesUtil {
     // Chinese
     doc.add(new TextField("artist", "刘德海", Field.Store.YES));
     doc.add(new TextField("song", "天意", Field.Store.YES));
-    // for Span query
     doc.add(new TextField("span", "the quick red fox jumps over the sleepy cat", Field.Store.YES));
+    doc.add(new TextField("phrase", "the lazy brown fox jumps over the quick dog", Field.Store.YES));
     docList.add(doc);
 
     doc = new Document();

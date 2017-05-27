@@ -159,14 +159,8 @@ public class PhraseQueryTest extends TestCase {
     }
 
     BooleanQuery bQuery = new BooleanQuery(true);
-    bQuery.add(
-        q2,
-        BooleanClause.Occur.SHOULD
-    );
-    bQuery.add(
-        q1,
-        BooleanClause.Occur.SHOULD
-    );
+    bQuery.add(q2, BooleanClause.Occur.SHOULD);
+    bQuery.add(q1, BooleanClause.Occur.SHOULD);
     TopDocs docs = searcher.search(bQuery, 10);
     assertEquals(5, docs.totalHits);
 
@@ -181,13 +175,12 @@ public class PhraseQueryTest extends TestCase {
     reader.close();
   }
 
-
   @Test
   public void testPhraseQuery5() throws Exception {
     System.out.println("testPhraseQuery5");
     System.out.println("==================================================");
 
-    QueryParser parser = new QueryParser("",  new StandardAnalyzer());
+    QueryParser parser = new QueryParser("", new StandardAnalyzer());
     Query query = parser.parse("span:(\"quick fox\"~1)");
 
     IndexSearcher searcher = new IndexSearcher(reader);
@@ -252,6 +245,26 @@ public class PhraseQueryTest extends TestCase {
     reader.close();
   }
 
+  @Test
+  public void testPhraseQuery6() throws Exception {
+    System.out.println("testPhraseQuery6");
+    System.out.println("==================================================");
+
+    QueryParser parser = new QueryParser("", new StandardAnalyzer());
+    Query query = parser.parse("phrase:(\"quick dog\"~10)");
+
+    IndexSearcher searcher = new IndexSearcher(reader);
+    TopDocs docs = searcher.search(query, 10);
+
+    assertEquals(2, docs.totalHits);
+    assertEquals("1", searcher.doc(docs.scoreDocs[0].doc).get("id"));
+    assertEquals("0", searcher.doc(docs.scoreDocs[1].doc).get("id"));
+    for (int i = 0; i < docs.totalHits; ++i) {
+      System.out.println("id: " + searcher.doc(docs.scoreDocs[i].doc).get("id"));
+      System.out.println("span: " + searcher.doc(docs.scoreDocs[i].doc).get("phrase"));
+      System.out.println("score: " + docs.scoreDocs[i].score);
+    }
+  }
 }
 
 
