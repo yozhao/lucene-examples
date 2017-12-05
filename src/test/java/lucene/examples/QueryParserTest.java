@@ -12,6 +12,7 @@ import org.apache.lucene.search.FuzzyQuery;
 import org.apache.lucene.search.PhraseQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TermQuery;
+import org.apache.lucene.search.TermRangeQuery;
 import org.junit.Test;
 
 /**
@@ -173,5 +174,9 @@ public class QueryParserTest {
     query = parser.parse("title:(\"小米科技\"~3)");
     Assert.assertTrue(query instanceof PhraseQuery);
     Assert.assertEquals(3, ((PhraseQuery)query).getSlop());
+
+    query = parser.parse("num:[1 TO 2]");
+    Assert.assertTrue(query instanceof TermRangeQuery);
+    Assert.assertEquals("1", ((TermRangeQuery)query).getLowerTerm().utf8ToString());
   }
 }
