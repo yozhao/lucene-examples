@@ -10,6 +10,7 @@ import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.FuzzyQuery;
 import org.apache.lucene.search.PhraseQuery;
+import org.apache.lucene.search.PrefixQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TermRangeQuery;
@@ -178,5 +179,9 @@ public class QueryParserTest {
     query = parser.parse("num:[1 TO 2]");
     Assert.assertTrue(query instanceof TermRangeQuery);
     Assert.assertEquals("1", ((TermRangeQuery)query).getLowerTerm().utf8ToString());
+
+    query = parser.parse("title:(abc de*)");
+    Assert.assertEquals(2, ((BooleanQuery)query).getClauses().length);
+    Assert.assertTrue(((BooleanQuery)query).getClauses()[1].getQuery() instanceof PrefixQuery);
   }
 }
